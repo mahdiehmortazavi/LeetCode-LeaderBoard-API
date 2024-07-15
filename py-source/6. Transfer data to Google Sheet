@@ -1,0 +1,133 @@
+## 1- LeetCode User's Data to Google Sheet
+#extract main data of each user
+all_user_submission = []
+
+for username in df_all_users_data['username'].unique():
+    users_data = df_all_users_data[df_all_users_data['username'] == username].iloc[0]
+    all_user_submission.append(users_data)
+
+
+df_all_users_data2 = pd.DataFrame(all_user_submission)
+
+# DataFrame to get counts for each difficulty level
+df_difficulty = df_all_users_data.pivot_table(index='username',  columns='difficulty', values='ac_count', aggfunc='sum')
+
+
+df_difficulty.reset_index(inplace=True)
+# df_difficulty = df_difficulty.iloc[1:]
+
+df_difficulty.rename(columns={'Easy': 'Easy_count', 'Medium': 'Medium_count', 'Hard': 'Hard_count'}, inplace=True)
+df_difficulty.drop(columns='All', inplace=True)
+
+
+#Final dataframe
+overall_df = pd.merge(df_all_users_data2, df_contest, on="username", how="inner")
+overall_df = pd.merge(overall_df, df_difficulty,  on="username", how="inner")
+
+overall_df.drop(columns='difficulty', inplace=True)
+
+overall_df.rename(columns={
+    'ac_count': 'solved problem',
+    'ac_submissions': 'accepted submissions',
+    'total_count': 'total problem',
+    'total_submissions': 'total submissions',
+    'points': 'LeetCode points',
+    'reputation': 'LeetCode reputation',
+    'ranking': 'LeetCode Rank',
+    'attendedContestsCount': 'number of attended Contests',
+    'rating': 'LeetCode contest rating',
+    'globalRanking': 'LeetCode contest globalRanking',
+    'totalParticipants': 'total Participants in contest',
+    'topPercentage': '% user outperformed',
+    'Easy_count': 'number of Easy problem solved',
+    'Hard_count': 'number of Hard problem solved',
+    'Medium_count': 'number of Medium problem solved'
+}, inplace=True)
+
+
+# Define the dictionary mapping column names to their desired positions
+column_positions = {
+    'solved problem':5,
+    'accepted submissions':7,
+    'total problem':6,
+    'total submissions':8,
+    'LeetCode points':15,
+    'LeetCode reputation':14,
+    'LeetCode Rank':1,
+    'number of attended Contests':11,
+    'LeetCode contest rating':9,
+    'LeetCode contest globalRanking':10,
+    'total Participants in contest':12,
+    '% user outperformed':13,
+    'number of Easy problem solved':2,
+    'number of Hard problem solved':3,
+    'number of Medium problem solved':4,
+    'profile_link':16
+}
+
+
+# Extract the column names and their corresponding positions from the dictionary
+columns_to_move = list(column_positions.keys())
+new_positions = list(column_positions.values())
+
+# Remove the columns from their current positions
+cols = [col for col in overall_df.columns if col not in columns_to_move]
+
+# Reinsert the columns into their desired positions
+for column, position in zip(columns_to_move, new_positions):
+    cols.insert(position, column)
+
+# Reassign the DataFrame with the reordered columns
+overall_df = overall_df[cols]
+
+# Select the specific sheet
+sheet_name = "your sheet name"  # Replace with your sheet name
+sheet = spreadsheet.worksheet(sheet_name)
+
+# Convert DataFrame to list of lists
+data_to_insert = overall_df.values.tolist()
+data_to_insert.insert(0, overall_df.columns.tolist())  # Add header
+
+# Clear existing content in the sheet
+sheet.clear()
+
+# Insert the data into the sheet
+sheet.insert_rows(data_to_insert, 1)
+
+
+## 2- Submissions Table to Google Sheet
+# Select the specific sheet
+sheet_name = "your sheet name" # Replace with your sheet name
+sheet = spreadsheet.worksheet(sheet_name) 
+
+# Convert DataFrame to list of lists
+data_to_insert = df_submissions1.values.tolist()
+
+# Find the last row with data in the first column
+last_row = len(sheet.col_values(1)) + 1
+# Update the sheet with the new data starting from the last row in the first column
+sheet.update(f'A{last_row}', data_to_insert)
+
+# remove duplicate and copy on another sheet
+
+sheet_name = "your sheet name" # Replace with your sheet name
+sheet = spreadsheet.worksheet(sheet_name)
+# Get all values from the sheet
+data = sheet.get_all_values()
+
+# Convert the data to a pandas DataFrame
+df = pd.DataFrame(data[1:], columns=data[0])  # Skip the first row for headers
+
+# Find and keep only the first occurrence of each duplicate row
+df_unique = df.drop_duplicates(keep='first')
+
+data_to_insert2 = df_unique.values.tolist()
+data_to_insert2.insert(0, df_unique.columns.tolist())  # Add header
+
+
+sheet_name2 = "your sheet name" # Replace with your sheet name
+sheet2 = spreadsheet.worksheet(sheet_name2)
+# Clear the existing sheet
+sheet2.clear()
+
+sheet2.insert_rows(data_to_insert2, 1)
