@@ -15,7 +15,7 @@ Together with my teacher Reza Shokrzad ([rezashokrzad](https://github.com/rezash
 
 ## LeetCode GraphQL API
 
-The project utilizes the GraphQL API from [[alfaarghya](https://github.com/alfaarghya)) user on GitHub to fetch user profile and recent submission data from LeetCode.
+The project utilizes the GraphQL API from ([alfaarghya](https://github.com/alfaarghya)) user on GitHub to fetch user profile and recent submission data from LeetCode.
 
 ## Prerequisites
 
