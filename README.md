@@ -57,16 +57,3 @@ Feel free to connect with me on:
 - [LeetCode](https://leetcode.com/mahdieh002)
 
 
-## Examples
-
-Here’s how you can use the project to fetch and display user data:
-
-```python
-from leetcode_api import LeetCodeClient
-
-client = LeetCodeClient(api_key='your_api_key')
-profile = client.get_user_profile('username')
-print(profile)
-
-
- 
