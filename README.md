@@ -41,16 +41,6 @@ First, click the "Fork" button at the top right of the page to create a copy of 
     pip install -r requirements.txt
     ```
 
-## Usage
-
-1. Set up your API credentials in the `config.py` file:
-    ```python
-    API_KEY = 'your_api_key'
-    ```
-2. Run the script to fetch user data:
-    ```bash
-    python fetch_data.py
-    ```
 ## Connect with me 
 Feel free to connect with me on:
 
