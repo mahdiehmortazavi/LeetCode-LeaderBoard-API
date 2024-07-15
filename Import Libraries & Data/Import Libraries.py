@@ -1,4 +1,3 @@
-```python
 # Install necessary packages: gspread for interacting with Google Sheets, pandas for data manipulation, and oauth2client for authentication
 !pip install gspread pandas oauth2client
 # Import the gspread library to interact with Google Sheets
@@ -14,4 +13,3 @@ import requests
 import random
 import datetime
 import json
-```python
