@@ -49,9 +49,15 @@ Before running the code, ensure you have the following installed:
     ```bash
     python fetch_data.py
     ```
+## Connect with me 
+Feel free to connect with me on:
+
+- [LinkedIn](https://www.linkedin.com/in/mahdiehmortazavi)
+- [Kaggle](https://www.kaggle.com/mahdieh002)
+- [LeetCode](https://leetcode.com/mahdieh002)
+
 
 ## Examples
-
 
 Here’s how you can use the project to fetch and display user data:
 
@@ -63,4 +69,4 @@ profile = client.get_user_profile('username')
 print(profile)
 
 
-
+ 
