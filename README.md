@@ -26,6 +26,8 @@ Before running the code, ensure you have the following installed:
 
 ## Installation
 
+Click the "Fork" button at the top right of the page to create a copy of the repository under your own GitHub account.
+
 1. Clone the repository:
     ```bash
     git clone https://github.com/yourusername/LeetCode-LeaderBoard-API.git
