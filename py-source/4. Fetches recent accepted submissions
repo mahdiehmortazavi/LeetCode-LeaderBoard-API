@@ -1,0 +1,107 @@
+def fetch_recent_submissions(username, limit=100000):
+    """
+    Fetches recent accepted submissions for a given user from LeetCode using the GraphQL API.
+
+    Parameters:
+    username (str): The username of the LeetCode user.
+    limit (int): The number of submissions to fetch (default is 100000).
+
+    Returns:
+    list: A list of recent accepted submissions.
+    """
+
+
+    url = "https://leetcode.com/graphql"
+    query = """
+    query recentAcSubmissions($username: String!, $limit: Int!) {
+      recentAcSubmissionList(username: $username, limit: $limit) {
+        id
+        title
+        timestamp
+        statusDisplay
+        # status
+        runtime
+        memory
+        lang
+      }
+    }
+    """
+
+    variables = {
+        "username": username,
+        "limit": limit  # Adjust limit if necessary
+    }
+
+    try:
+        response = requests.post(url, json={'query': query, 'variables': variables})
+        response.raise_for_status()  # Raises an HTTPError for bad responses
+    except requests.exceptions.HTTPError as http_err:
+        print(f"HTTP error occurred: {http_err}")
+        print("Response content:", response.content.decode())
+        return []
+    except Exception as err:
+        print(f"An error occurred: {err}")
+        return []
+
+    try:
+        data = response.json()
+    except json.JSONDecodeError as json_err:
+        print(f"JSON decode error occurred: {json_err}")
+        print("Response content:", response.content.decode())
+        return []
+
+    try:
+        submissions = data['data']['recentAcSubmissionList']
+    except KeyError as key_err:
+        print(f"Key error: {key_err}")
+        print("Response content:", data)
+        return []
+
+    return submissions
+
+def get_submissions(usernames, limit=100000):
+    """
+    Retrieves recent accepted submissions for multiple users from LeetCode.
+
+    Parameters:
+    usernames (list): A list of LeetCode usernames.
+    limit (int): The number of submissions to fetch per user (default is 100000).
+
+    Returns:
+    list: A list of dictionaries containing submission details for each user.
+    """
+    all_results = []
+    for username in usernames:
+        results = fetch_recent_submissions(username, limit)
+        for submission in results:
+            all_results.append({
+                'username': username,
+                'title': submission['title'],
+                'timestamp': submission['timestamp'],
+                'statusDisplay': submission['statusDisplay'],
+                'runtime': submission['runtime'],
+                'memory': submission['memory'],
+                'lang': submission.get('lang', None)  # Assuming 'lang' might be optional
+            })
+    return all_results
+
+
+limit = 100000  # Adjust the limit as necessary
+results = get_submissions(usernames, limit)
+
+# Convert results to DataFrame
+df_submissions1 = pd.DataFrame(results)
+
+# Convert valid timestamps to numeric values (integers), invalid ones (including None) to NaN
+df_submissions1['timestamp'] = pd.to_numeric(df_submissions1['timestamp'], errors='coerce')
+
+# Drop rows with NaN values in the timestamp column
+df_submissions1 = df_submissions1.dropna(subset=['timestamp'])
+
+# Ensure the timestamp column is integer type
+df_submissions1['timestamp'] = df_submissions1['timestamp'].astype(int)
+
+# Convert timestamp to datetime and format it
+df_submissions1['timestamp'] = df_submissions1['timestamp'].apply(
+    lambda x: datetime.datetime.fromtimestamp(x).strftime('%Y-%m-%d %H:%M:%S')
+)
