@@ -1,0 +1,73 @@
+def get_users_contest_ranking(usernames):
+    url = "https://leetcode.com/graphql"
+
+    # Define the GraphQL query
+    query = """
+    query GetUserContestRanking($username: String!) {
+        userContestRanking(username: $username) {
+            attendedContestsCount
+            rating
+            globalRanking
+            totalParticipants
+            topPercentage
+            badge {
+                name
+            }
+        }
+    }
+    """
+
+    results = []
+
+    for username in usernames:
+        # Define variables for the query
+        variables = {'username': username}
+
+        # Make the request
+        response = requests.post(url, json={'query': query, 'variables': variables})
+
+        # Check if request was successful
+        if response.status_code == 200:
+            data = response.json()['data']
+            ranking_info = data.get('userContestRanking', None)
+
+            if ranking_info is None:
+                ranking_info = {
+                    'attendedContestsCount': 0,
+                    'rating': 0,
+                    'globalRanking': 0,
+                    'totalParticipants': 0,
+                    'topPercentage': 0,
+                    'badge': None
+                }
+
+            results.append({'username': username, 'ranking_info': ranking_info})
+        else:
+            raise Exception(f"Query failed for user {username} with status code {response.status_code}: {response.text}")
+
+    return results
+
+
+
+# Fetch contest ranking information for users
+results = get_users_contest_ranking(usernames)
+
+# Prepare data for DataFrame
+data = []
+for result in results:
+    username = result['username']
+    ranking_info = result['ranking_info']
+
+    # Add ranking info
+    row = {
+        'username': username,
+        'attendedContestsCount': ranking_info.get('attendedContestsCount', 0),
+        'rating': ranking_info.get('rating', 0),
+        'globalRanking': ranking_info.get('globalRanking', 0),
+        'totalParticipants': ranking_info.get('totalParticipants', 0),
+        'topPercentage': ranking_info.get('topPercentage', 0),
+    }
+    data.append(row)
+
+# Convert to DataFrame
+df_contest = pd.DataFrame(data)
