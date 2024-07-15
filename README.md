@@ -28,11 +28,11 @@ Before running the code, ensure you have the following installed:
 
 1. Clone the repository:
     ```bash
-    git clone https://github.com/yourusername/leetcode-api-project.git
+    git clone https://github.com/yourusername/LeetCode-LeaderBoard-API.git
     ```
 2. Change to the project directory:
     ```bash
-    cd leetcode-api-project
+    cd LeetCode-LeaderBoard-API
     ```
 3. Install the required packages:
     ```bash
