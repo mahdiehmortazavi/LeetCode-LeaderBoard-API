@@ -11,7 +11,7 @@ This project demonstrates how to interact with the LeetCode API to fetch user pr
 
 ## Internal Leaderboard
 
-Together with my teacher Reza Shokrzad ([rezashokrzad](https://github.com/rezashokrzad)), we created an internal leaderboard for our community, DSLanders at Cafetadris([cafetadris](https://cafetadris.com)). This leaderboard uses LeetCode data to rank users based on their performance in terms of best runtime and memory usage for each LeetCode task. Additionally, users earn extra points for giving presentations about a LeetCode task or related concepts such as Algorithms or Data Structures during the week ([DSLanders LeetCode Leaderboard](https://docs.google.com/spreadsheets/d/1L5MzMm9sruHGk4nkCKXRhHN_Z4S8ReLkp0BwwcFggJ0/edit?gid=949630897#gid=949630897)).
+Together with my teacher Reza Shokrzad ([rezashokrzad](https://github.com/rezashokrzad)), we created an internal leaderboard for our community, DSLanders at Cafetadris([cafetadris](https://cafetadris.com)). This leaderboard uses LeetCode data to rank users based on their performance in terms of best runtime and memory usage for each LeetCode problems. Additionally, users earn extra points for giving presentations about a LeetCode problems or related concepts such as Algorithms or Data Structures for specific problems ([DSLanders LeetCode Leaderboard](https://docs.google.com/spreadsheets/d/1L5MzMm9sruHGk4nkCKXRhHN_Z4S8ReLkp0BwwcFggJ0/edit?gid=949630897#gid=949630897)).
 
 ## LeetCode GraphQL API
 
